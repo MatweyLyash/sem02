@@ -56,7 +56,6 @@ struct state
 
 		if (this->name == nameCountry)
 		{
-			output();
 			flag = true;
 		}
 
@@ -106,7 +105,6 @@ struct state
 		file << surnamePresident << endl;
 		file << endl;
 		file.close();
-		del_struct(name);
 	}
 
 	void read(string path)		//Чтение структуры из файла
@@ -124,6 +122,7 @@ struct state
 		getline(file, population);
 		getline(file, square);
 		getline(file, surnamePresident);
+		output();
 		file.close();
 	}
 };
@@ -156,16 +155,37 @@ int main()
 		{
 		case 1:
 		{
-			int counter = 0;
-			country[counter].input();
-			counter++;
+			cout << "Введите кол-во стран вы хотите добавить: " << endl;
+			
+			int num;
+			cin >> num;
+			
+			for (int i = 0; i < num; i++)
+			{
+				country[i].input();
+			}
 			break;
 		}
 		case 2:
 		{
+			cout << "Введите название страны" << endl;
+			cin.ignore();
+			string countryName;
+			bool flag = false;
+			getline(cin, countryName);
+
 			for (int i = 0; i < SIZE; i++)
 			{
-				country[i].output();
+				if (country[i].search(countryName))
+				{
+					country[i].output();
+					flag = true;
+					break;
+				}
+			}
+			if (!flag)
+			{
+				cout << "Страна не найдена!" << endl;
 			}
 			break;
 		}
@@ -185,21 +205,33 @@ int main()
 		{
 			cout << "Введите название страны: ";
 			string nameCountry;
+			bool flag;
 			cin.ignore();
 			getline(cin, nameCountry);
 			for (int i = 0; i < SIZE; i++)
 			{
-				country[i].search(nameCountry);
+				flag = country[i].search(nameCountry);
+				if (flag)
+				{
+					country[i].output();
+					break;
+				}
+			}
+			if (!flag)
+			{
+				cout << "Страна не найдена" << endl;
 			}
 			break;
 		}
 		case 5:
 		{
 			country[49].write(path);
+			break;
 		}
 		case 6:
 		{
 			country[49].read(path);
+			break;
 		}
 		case 7:
 		{
